@@ -1,5 +1,12 @@
 apply plugin: 'android-library'
 
+group = 'com.fortysevendeg.swipelistview'
+version = '1.0-SNAPSHOT'
+
+repositories {
+mavenCentral()
+}
+
 dependencies {
 	compile 'com.android.support:support-v4:18.0.+'
 	compile 'com.nineoldandroids:library:2.4.0+'
