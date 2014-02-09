@@ -139,6 +139,7 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
             @Override
             public void onClick(View v) {
                 swipeListView.onClickFrontView(downPosition);
+                resetCell();
             }
         });
         if (swipeOpenOnLongPress) {
@@ -717,6 +718,7 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
                 int x = (int) motionEvent.getRawX() - listViewCoords[0];
                 int y = (int) motionEvent.getRawY() - listViewCoords[1];
                 View child;
+                boolean childFound = false;
                 for (int i = 0; i < childCount; i++) {
                     child = swipeListView.getChildAt(i);
                     child.getHitRect(rect);
@@ -727,6 +729,7 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
                     boolean allowSwipe = swipeListView.getAdapter().isEnabled(childPosition) && swipeListView.getAdapter().getItemViewType(childPosition) >= 0;
 
                     if (allowSwipe && rect.contains(x, y)) {
+                        childFound = true;
                         setParentView(child);
                         setFrontView(child.findViewById(swipeFrontView));
 
@@ -745,10 +748,11 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
                     }
                 }
                 view.onTouchEvent(motionEvent);
-                return true;
+                return childFound;
             }
 
-            case MotionEvent.ACTION_UP: {
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL: {
                 if (velocityTracker == null || !swiping || downPosition == ListView.INVALID_POSITION) {
                     break;
                 }
